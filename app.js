@@ -1,12 +1,12 @@
 var express = require('express')
   , config = require('./config')
   , routes = require('./routes')
-  , user = require('./routes/user');
+  , retro = require('./routes/retro');
 
 var app = express();
 config(app);
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/retro', retro.list);
 
 module.exports = app;
