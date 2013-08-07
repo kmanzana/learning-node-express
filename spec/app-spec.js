@@ -1,7 +1,7 @@
-// require('./spec-helper');
+process.env.NODE_ENV = 'test';
 var request = require('supertest')
-  , retro = require('../routes/retro')
   , app = require('../app')
+  , retro = require('../routes/retro')
   , sinon = require('sinon');
 require('should');  
 
@@ -21,36 +21,55 @@ describe('GET /', function(){
 })
 
 describe('GET /retro', function() {
-  // less involved, but maybe stupid to test
-  beforeEach(function(){
-    this.stub = sinon.stub(retro, 'list');
+  before(function() {
+    delete require.cache[require.resolve('../app')];
+
+    sinon.stub(retro, 'list', function(req, res){ 
+      res.send('blah');
+    });
+
+    app = require('../app');
+  })
+
+  after(function() {
+    retro.list.restore();
   })
 
   it('should call retro.list', function(done) {
-    var stub = this.stub
-    console.log('calling stub');
-
     request(app)
       .get('/retro')
       .end(function(err, res){
-        stub.callCount.should.equal(1);
+        retro.list.callCount.should.equal(1);
 
         if (err) return done(err);
         done();
       })
   })
-
-  it('should respond with a JSON list of retros') // <- more of an integration test, will it work? stub db?
-
-  it('should make a query to mongodb')
 })
 
 describe('POST /retro', function() {
-  it
-  it('should save the name')
+  before(function() {
+    delete require.cache[require.resolve('../app')];
 
-  it('should save the name of the team')
+    sinon.stub(retro, 'create', function(req, res){ 
+      res.send('blah');
+    });
 
-  it('should save anything else important')
+    app = require('../app');
+  })
 
+  after(function() {
+    retro.create.restore();
+  })
+
+  it('should call retro.create', function(done) {
+    request(app)
+      .post('/retro')
+      .end(function(err, res){
+        retro.create.callCount.should.equal(1);
+
+        if (err) return done(err);
+        done();
+      })
+  })
 })

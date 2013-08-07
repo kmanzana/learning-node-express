@@ -7,6 +7,8 @@ var app = express();
 config(app);
 
 app.get('/', routes.index);
+
 app.get('/retro', retro.list);
+app.post('/retro', retro.create);
 
 module.exports = app;

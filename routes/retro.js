@@ -1,7 +1,10 @@
 var retro = {
   list: function(req, res){
-    console.log('actual called');
-    res.send("respond with a resource");
+    res.send("return all retros");
+  },
+
+  create: function(req, res) {
+    res.send("create a new retro");
   }
 }
 
