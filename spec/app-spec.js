@@ -6,7 +6,8 @@ var request = require('supertest')
 require('should');  
 
 describe('GET /', function(){
-  it('should respond with "hello world"', function(done){
+  // really slow test
+  it.skip('should respond with "hello world"', function(done){
     request(app)
       .get('/')
       .expect('Content-Type', /html/)

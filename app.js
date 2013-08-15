@@ -4,6 +4,7 @@ var express = require('express')
   , retro = require('./routes/retro');
 
 var app = express();
+
 config(app);
 
 app.get('/', routes.index);
