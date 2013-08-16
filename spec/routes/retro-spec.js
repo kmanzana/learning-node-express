@@ -17,36 +17,35 @@ describe('retro', function() {
     beforeEach(function() {
       this.req = {};
 
-      this.res = {
-        send: sinon.stub(),
-        status: sinon.stub().returns(this.res)
-      };
+      var sendStub = this.sendStub = sinon.stub();
 
-      console.log(this.res.status);
+      this.res = {
+        send: sendStub,
+        status: sinon.stub().returns({send: sendStub})
+      };
     });
 
     it('should query mongodb', function() {
       Retro.find = sinon.stub().callsArgWith(0, undefined, []);
-      var retro = require('../../routes/retro');
+      var retroRoutes = require('../../routes/retro');
 
-      retro.list(this.req, this.res);
+      retroRoutes.list(this.req, this.res);
 
       Retro.find.callCount.should.equal(1);
-      this.res.send.callCount.should.equal(1);
-      this.res.send.firstCall.args[0].should.eql([]);
+      this.sendStub.callCount.should.equal(1);
+      this.sendStub.firstCall.args[0].should.eql([]);
     });
 
-    it ('should send an error if there is a problem accessing the db', function() {
-
+    it('should send an error if there is a problem accessing the db', function() {
       Retro.find = sinon.stub().callsArgWith(0, 'error', undefined);
-      var retro = require('../../routes/retro');
+      var retroRoutes = require('../../routes/retro');
 
-      retro.list(this.req, this.res);
+      retroRoutes.list(this.req, this.res);
 
       Retro.find.callCount.should.equal(1);
-      // this.res.status.firstCall.args[0].should.equal(500);
-      this.res.status().send.callCount.should.equal(1);
-      this.res.send.firstCall.args[0].error.should.include('error');
+      this.res.status.firstCall.args[0].should.equal(500);
+      this.sendStub.callCount.should.equal(1);
+      this.sendStub.firstCall.args[0].error.should.include('error');
     });
   });
 
@@ -54,9 +53,7 @@ describe('retro', function() {
     it('should call ')
   })
 
-
   // it('should save the name')
   // it('should save the name of the team')
   // it('should save anything else important')
-
 });

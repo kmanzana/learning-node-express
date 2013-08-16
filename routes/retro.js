@@ -13,18 +13,18 @@ var retro = {
   },
 
   create: function(req, res) {
-    var newRetro = new Retro({
-      name: req.body.name,
-      teamName: req.body.teamName
-    });
+    // var newRetro = new Retro({
+    //   name: req.body.name,
+    //   teamName: req.body.teamName
+    // });
 
-    newRetro.save(function(err, savedRetro) {
-      if (err) {
-        res.status(500).send({error: 'Mongo error saving retros'});
-      } else {
-        res.send(savedRetro);
-      }
-    });
+    // newRetro.save(function(err, savedRetro) {
+    //   if (err) {
+    //     res.status(500).send({error: 'Mongo error saving retros'});
+    //   } else {
+    //     res.send(savedRetro);
+    //   }
+    // });
   }
 }
 
