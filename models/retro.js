@@ -5,4 +5,4 @@ var retroSchema = mongoose.Schema({
     teamName: String
 });
 
-var Retro = mongoose.model('Retro', retroSchema);
+module.exports = mongoose.model('Retro', retroSchema);

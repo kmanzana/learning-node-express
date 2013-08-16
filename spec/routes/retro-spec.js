@@ -13,20 +13,30 @@ var Retro = require('../../models/retro')
 require('should');  
 
 describe('retro', function() {
+  beforeEach(function() {
+    this.req = {
+      body: {
+        name: 'first retro',
+        teamName: 'awesomeness'
+      }
+    };
+
+    var sendStub = this.sendStub = sinon.stub();
+
+    this.res = {
+      send: sendStub,
+      status: sinon.stub().returns({send: sendStub})
+    };
+  });
+
   describe('.list', function() {
-    beforeEach(function() {
-      this.req = {};
-
-      var sendStub = this.sendStub = sinon.stub();
-
-      this.res = {
-        send: sendStub,
-        status: sinon.stub().returns({send: sendStub})
-      };
+    afterEach(function() {
+      Retro.find.restore();
     });
 
     it('should query mongodb', function() {
-      Retro.find = sinon.stub().callsArgWith(0, undefined, []);
+      sinon.stub(Retro, 'find').callsArgWith(0, undefined, []);
+      // Retro.find = sinon.stub().callsArgWith(0, undefined, []);
       var retroRoutes = require('../../routes/retro');
 
       retroRoutes.list(this.req, this.res);
@@ -37,7 +47,7 @@ describe('retro', function() {
     });
 
     it('should send an error if there is a problem accessing the db', function() {
-      Retro.find = sinon.stub().callsArgWith(0, 'error', undefined);
+      sinon.stub(Retro, 'find').callsArgWith(0, 'error', undefined);
       var retroRoutes = require('../../routes/retro');
 
       retroRoutes.list(this.req, this.res);
@@ -50,10 +60,36 @@ describe('retro', function() {
   });
 
   describe('.create', function() {
-    it('should call ')
-  })
+    afterEach(function() {
+      Retro.create.restore();
+    });
 
-  // it('should save the name')
-  // it('should save the name of the team')
-  // it('should save anything else important')
+    // tests to ensure validation?
+    it('should call save to the db', function() {
+      sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
+      var retroRoutes = require('../../routes/retro');
+
+      retroRoutes.create(this.req, this.res);
+
+      Retro.create.callCount.should.equal(1);
+      Retro.create.firstCall.args[0].should.eql({
+        name: 'first retro',
+        teamName: 'awesomeness'
+      })
+      this.sendStub.callCount.should.equal(1);
+    });
+
+    it('should send an error if there is a problem accessing the db', function() {
+      sinon.stub(Retro, 'create').callsArgWith(1, 'error', undefined);
+      var retroRoutes = require('../../routes/retro');
+
+      retroRoutes.create(this.req, this.res);
+
+      Retro.create.callCount.should.equal(1);
+      this.res.status.firstCall.args[0].should.equal(500);
+      this.sendStub.callCount.should.equal(1);
+    });
+
+    it('should send an error if the necessary data is not included');
+  })
 });
