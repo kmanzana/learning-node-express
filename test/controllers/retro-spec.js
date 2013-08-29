@@ -1,7 +1,6 @@
 process.env.NODE_ENV = 'test';
 var Retro = require('../../models/retro')
   , sinon = require('sinon');
-require('should');  
 
 describe('retro', function() {
   beforeEach(function() {

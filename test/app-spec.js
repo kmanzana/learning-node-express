@@ -3,7 +3,6 @@ var request = require('supertest')
   , app = require('../app')
   , retro = require('../controllers/retro')
   , sinon = require('sinon');
-require('should');  
 
 describe('GET /', function(){
   // really slow test
