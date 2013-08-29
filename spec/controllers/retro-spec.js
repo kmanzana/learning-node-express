@@ -1,12 +1,3 @@
-// When I send an HTTP POST to /retro I want it to create a new retro with:
-// - a name for the retro
-// - team name
-// - anything else you think is important
-
-// When I send a GET to /retro, I want to see a JSON list of retros.
-
-// Save them in mongo, use mongoosejs. Don't worry about a UI, use "Simple Rest Client", a chrome plugin, to make PUT requests.
-
 process.env.NODE_ENV = 'test';
 var Retro = require('../../models/retro')
   , sinon = require('sinon');
@@ -36,10 +27,9 @@ describe('retro', function() {
 
     it('should query mongodb', function() {
       sinon.stub(Retro, 'find').callsArgWith(0, undefined, []);
-      // Retro.find = sinon.stub().callsArgWith(0, undefined, []);
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
 
-      retroRoutes.list(this.req, this.res);
+      retroCtrl.list(this.req, this.res);
 
       Retro.find.callCount.should.equal(1);
       this.sendStub.callCount.should.equal(1);
@@ -48,9 +38,9 @@ describe('retro', function() {
 
     it('should send an error if there is a problem accessing the db', function() {
       sinon.stub(Retro, 'find').callsArgWith(0, 'error', undefined);
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
 
-      retroRoutes.list(this.req, this.res);
+      retroCtrl.list(this.req, this.res);
 
       Retro.find.callCount.should.equal(1);
       this.res.status.firstCall.args[0].should.equal(500);
@@ -64,12 +54,11 @@ describe('retro', function() {
       Retro.create.restore();
     });
 
-    // tests to ensure validation?
     it('should call save to the db', function() {
       sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
 
-      retroRoutes.create(this.req, this.res);
+      retroCtrl.create(this.req, this.res);
 
       Retro.create.callCount.should.equal(1);
       Retro.create.firstCall.args[0].should.eql({
@@ -81,9 +70,9 @@ describe('retro', function() {
 
     it('should send an error if there is a problem accessing the db', function() {
       sinon.stub(Retro, 'create').callsArgWith(1, 'error', undefined);
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
 
-      retroRoutes.create(this.req, this.res);
+      retroCtrl.create(this.req, this.res);
 
       Retro.create.callCount.should.equal(1);
       this.res.status.firstCall.args[0].should.equal(500);
@@ -93,10 +82,10 @@ describe('retro', function() {
 
     it('should send error if req.body is undefined', function() {
       sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
       this.req.body = undefined;
 
-      retroRoutes.create(this.req, this.res);
+      retroCtrl.create(this.req, this.res);
 
       this.res.status.firstCall.args[0].should.equal(500);
       this.sendStub.callCount.should.equal(1);
@@ -104,10 +93,10 @@ describe('retro', function() {
 
     it('should send error if req.body.name is undefined', function() {
       sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
       this.req.body.name = undefined;
 
-      retroRoutes.create(this.req, this.res);
+      retroCtrl.create(this.req, this.res);
 
       this.res.status.firstCall.args[0].should.equal(500);
       this.sendStub.callCount.should.equal(1);
@@ -115,10 +104,10 @@ describe('retro', function() {
 
     it('should send error if req.body.teamName is undefined', function() {
       sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
-      var retroRoutes = require('../../routes/retro');
+      var retroCtrl = require('../../controllers/retro');
       this.req.body.teamName = undefined;
 
-      retroRoutes.create(this.req, this.res);
+      retroCtrl.create(this.req, this.res);
 
       this.res.status.firstCall.args[0].should.equal(500);
       this.sendStub.callCount.should.equal(1);

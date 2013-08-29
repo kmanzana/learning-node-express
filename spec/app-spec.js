@@ -1,7 +1,7 @@
 process.env.NODE_ENV = 'test';
 var request = require('supertest')
   , app = require('../app')
-  , retro = require('../routes/retro')
+  , retro = require('../controllers/retro')
   , sinon = require('sinon');
 require('should');  
 
@@ -66,11 +66,8 @@ describe('POST /retro', function() {
   it('should call retro.create', function(done) {
     request(app)
       .post('/retro')
-      // test to see data is passed in?
-      // .data({blah: "blah"})
       .end(function(err, res){
         retro.create.callCount.should.equal(1);
-        // retro.create.first.call.args[0].body.blah.should.equal("blah");
 
         if (err) return done(err);
         done();
