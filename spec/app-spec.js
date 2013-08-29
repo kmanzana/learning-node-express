@@ -18,8 +18,8 @@ describe('GET /', function(){
         if (err) return done(err);
         done();
       });
-  })
-})
+  });
+});
 
 describe('GET /retro', function() {
   before(function() {
@@ -30,7 +30,7 @@ describe('GET /retro', function() {
     });
 
     app = require('../app');
-  })
+  });
 
   after(function() {
     retro.list.restore();
@@ -44,9 +44,9 @@ describe('GET /retro', function() {
 
         if (err) return done(err);
         done();
-      })
-  })
-})
+      });
+  });
+});
 
 describe('POST /retro', function() {
   before(function() {
@@ -57,20 +57,23 @@ describe('POST /retro', function() {
     });
 
     app = require('../app');
-  })
+  });
 
   after(function() {
     retro.create.restore();
-  })
+  });
 
   it('should call retro.create', function(done) {
     request(app)
       .post('/retro')
+      // test to see data is passed in?
+      // .data({blah: "blah"})
       .end(function(err, res){
         retro.create.callCount.should.equal(1);
+        // retro.create.first.call.args[0].body.blah.should.equal("blah");
 
         if (err) return done(err);
         done();
-      })
-  })
-})
+      });
+  });
+});

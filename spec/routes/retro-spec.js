@@ -88,8 +88,40 @@ describe('retro', function() {
       Retro.create.callCount.should.equal(1);
       this.res.status.firstCall.args[0].should.equal(500);
       this.sendStub.callCount.should.equal(1);
+      this.sendStub.firstCall.args[0].error.should.include('error');
     });
 
-    it('should send an error if the necessary data is not included');
+    it('should send error if req.body is undefined', function() {
+      sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
+      var retroRoutes = require('../../routes/retro');
+      this.req.body = undefined;
+
+      retroRoutes.create(this.req, this.res);
+
+      this.res.status.firstCall.args[0].should.equal(500);
+      this.sendStub.callCount.should.equal(1);
+    });
+
+    it('should send error if req.body.name is undefined', function() {
+      sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
+      var retroRoutes = require('../../routes/retro');
+      this.req.body.name = undefined;
+
+      retroRoutes.create(this.req, this.res);
+
+      this.res.status.firstCall.args[0].should.equal(500);
+      this.sendStub.callCount.should.equal(1);
+    });
+
+    it('should send error if req.body.teamName is undefined', function() {
+      sinon.stub(Retro, 'create').callsArgWith(1, undefined, {});
+      var retroRoutes = require('../../routes/retro');
+      this.req.body.teamName = undefined;
+
+      retroRoutes.create(this.req, this.res);
+
+      this.res.status.firstCall.args[0].should.equal(500);
+      this.sendStub.callCount.should.equal(1);
+    });
   })
 });

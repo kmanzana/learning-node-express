@@ -12,17 +12,20 @@ var retro = {
   },
 
   create: function(req, res) {
-    // if !req.body || !req.body.name || !req.body.teamName {}
-    Retro.create({
-      name: req.body.name,
-      teamName: req.body.teamName
-    }, function(err, savedRetro) {
-      if (err) {
-        res.status(500).send({error: 'Mongo error saving retros'});
-      } else {
-        res.send(savedRetro);
-      }
-    });
+    if (!req.body || !req.body.name || !req.body.teamName) {
+      res.status(500).send({error: 'Necessary info not included'});
+    } else {
+      Retro.create({
+        name: req.body.name,
+        teamName: req.body.teamName
+      }, function(err, savedRetro) {
+        if (err) {
+          res.status(500).send({error: 'Mongo error saving retros'});
+        } else {
+          res.send(savedRetro);
+        }
+      });
+    }
   }
 };
 
