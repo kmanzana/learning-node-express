@@ -36,7 +36,8 @@ describe('GET /retro', function() {
     retro.list.restore();
   })
 
-  it('should call retro.list', function(done) {
+  // slow test
+  it.skip('should call retro.list', function(done) {
     request(app)
       .get('/retro')
       .end(function(err, res){
